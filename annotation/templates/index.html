@@ -4,32 +4,217 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Annotation</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/common.css' %}" />
   </head>
   <body>
-    <header>
-      <h1>API Annotation</h1>
-      <nav>
-        <a href="new/">Nouveau Test</a>
-        <a href="history.html">Historique</a>
-        <a href="swagger.html">API Directe</a>
-        <a href="/logout">Déconnexion</a>
-      </nav>
-    </header>
-    <main>
-      <h2>Envoyer un fichier médical</h2>
-      <form action="/analyze" method="POST" enctype="multipart/form-data">
-        <label for="file">Choisir un fichier (IRM, Scanner, ECG…) :</label>
-        <input
-          type="file"
-          id="file"
-          name="file"
-          accept="image/*,.dcm"
-          required
-        />
-        <button type="submit">Analyser</button>
-      </form>
-    </main>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="nav-logo">
+          <h2>MedAnnote</h2>
+        </div>
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a href="/" class="nav-link active">Accueil</a>
+          </li>
+          <li class="nav-item">
+            <a href="upload/" class="nav-link">Téléversement</a>
+          </li>
+          <li class="nav-item">
+            <a href="historique/" class="nav-link">Historique</a>
+          </li>
+          <li class="nav-item">
+            <a href="login/" class="nav-link">Connexion</a>
+          </li>
+        </ul>
+        <div class="hamburger">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-container">
+        <div class="hero-content">
+          <h1 class="hero-title">
+            Annotation Automatique de Données Médicales
+          </h1>
+          <p class="hero-subtitle">
+            Analysez vos images médicales avec l'intelligence artificielle
+          </p>
+          <a href="upload.html" class="btn btn-primary hero-btn"
+            >Commencer l'analyse</a
+          >
+        </div>
+        <div class="hero-image">
+          <div class="medical-icon">
+            <svg
+              width="200"
+              height="200"
+              viewBox="0 0 200 200"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle
+                cx="100"
+                cy="100"
+                r="80"
+                stroke="#2563eb"
+                stroke-width="4"
+                fill="none"
+              />
+              <path
+                d="M70 100h60M100 70v60"
+                stroke="#2563eb"
+                stroke-width="6"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Upload Section -->
+    <section class="quick-upload">
+      <div class="container">
+        <h2 class="section-title">Téléversement Rapide</h2>
+        <div class="upload-zone" id="quickUploadZone">
+          <div class="upload-content">
+            <svg
+              width="48"
+              height="48"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+                stroke="#2563eb"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <polyline
+                points="7,10 12,15 17,10"
+                stroke="#2563eb"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <line
+                x1="12"
+                y1="15"
+                x2="12"
+                y2="3"
+                stroke="#2563eb"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+            <p>
+              Glissez-déposez votre fichier ici ou
+              <span class="upload-link">cliquez pour sélectionner</span>
+            </p>
+            <small>Formats supportés: JPG, PNG, DICOM</small>
+          </div>
+          <input
+            type="file"
+            id="quickFileInput"
+            accept=".jpg,.jpeg,.png,.dcm"
+            hidden
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Recent Analyses Section -->
+    <section class="recent-analyses">
+      <div class="container">
+        <h2 class="section-title">Analyses Récentes</h2>
+        <div class="analyses-grid" id="recentAnalyses">
+          <!-- Les analyses récentes seront chargées ici via JavaScript -->
+          <div class="analysis-card">
+            <div class="analysis-header">
+              <h3>Scanner_thorax_001.jpg</h3>
+              <span class="analysis-date">Il y a 2 heures</span>
+            </div>
+            <div class="analysis-result">
+              <span class="result-label">Poumons normaux</span>
+              <span class="confidence-score">95%</span>
+            </div>
+            <div class="analysis-actions">
+              <button class="btn btn-secondary btn-sm">Voir détails</button>
+            </div>
+          </div>
+
+          <div class="analysis-card">
+            <div class="analysis-header">
+              <h3>IRM_cerebral_002.png</h3>
+              <span class="analysis-date">Hier</span>
+            </div>
+            <div class="analysis-result">
+              <span class="result-label">Anomalie détectée</span>
+              <span class="confidence-score">87%</span>
+            </div>
+            <div class="analysis-actions">
+              <button class="btn btn-secondary btn-sm">Voir détails</button>
+            </div>
+          </div>
+
+          <div class="analysis-card">
+            <div class="analysis-header">
+              <h3>ECG_patient_003.jpg</h3>
+              <span class="analysis-date">Il y a 3 jours</span>
+            </div>
+            <div class="analysis-result">
+              <span class="result-label">Rythme normal</span>
+              <span class="confidence-score">92%</span>
+            </div>
+            <div class="analysis-actions">
+              <button class="btn btn-secondary btn-sm">Voir détails</button>
+            </div>
+          </div>
+        </div>
+        <div class="view-all">
+          <a href="history.html" class="btn btn-outline"
+            >Voir tout l'historique</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+      <div class="container">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-number">1,247</div>
+            <div class="stat-label">Analyses effectuées</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">94.2%</div>
+            <div class="stat-label">Précision moyenne</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">2.3s</div>
+            <div class="stat-label">Temps moyen d'analyse</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">24/7</div>
+            <div class="stat-label">Disponibilité</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script src="{% static 'js/common.js' %}"></script>
+    <script src="{% static 'js/index.js' %}"></script>
   </body>
 </html>
