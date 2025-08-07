@@ -21,7 +21,7 @@ from .views import *
 
 urlpatterns = [
     path("", index,name='index'),
-    path("login/", login, name="login_page"),
+    path("login/", login, name="login"),
     path("upload/", upload, name='upload'),
     path("resultats/", resultats, name="resultats"),
     path("historique/", historique, name="historique"),

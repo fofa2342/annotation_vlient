@@ -18,16 +18,16 @@
         </div>
         <ul class="nav-menu">
           <li class="nav-item">
-            <a href="/" class="nav-link active">Accueil</a>
+            <a href="{% url 'index' %}" class="nav-link active">Accueil</a>
           </li>
           <li class="nav-item">
-            <a href="upload/" class="nav-link">Téléversement</a>
+            <a href="{% url 'upload' %}" class="nav-link">Téléversement</a>
           </li>
           <li class="nav-item">
-            <a href="historique/" class="nav-link">Historique</a>
+            <a href="{% url 'historique' %}" class="nav-link">Historique</a>
           </li>
           <li class="nav-item">
-            <a href="login/" class="nav-link">Connexion</a>
+            <a href="{% url 'login' %}" class="nav-link">Connexion</a>
           </li>
         </ul>
         <div class="hamburger">
@@ -48,7 +48,7 @@
           <p class="hero-subtitle">
             Analysez vos images médicales avec l'intelligence artificielle
           </p>
-          <a href="upload.html" class="btn btn-primary hero-btn"
+          <a href="{% url "upload" %}" class="btn btn-primary hero-btn"
             >Commencer l'analyse</a
           >
         </div>
