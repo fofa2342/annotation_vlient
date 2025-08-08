@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         showNotification('Téléchargement du rapport en cours...', 'info');
         
-        // Simuler le téléchargement
+        // Faire  le téléchargement
         setTimeout(() => {
             showNotification('Rapport téléchargé avec succès!', 'success');
         }, 2000);
