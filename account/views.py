@@ -10,7 +10,7 @@ def login_user(request):
     if request.method == 'POST':
         email = request.POST.get('loginEmail')
         password = request.POST.get('loginPassword')
-        form = AuthenticationForm(request, data=request.POST)
+        form = AuthenticationForm(request, email=email, password=password)
         if form.is_valid():
             user = form.get_user()
             login(request, user)
