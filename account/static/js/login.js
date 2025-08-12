@@ -1,16 +1,16 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Éléments DOM
     const authForms = document.querySelectorAll('.auth-form');
     const switchFormLinks = document.querySelectorAll('.switch-form');
     const forgotPasswordLink = document.getElementById('forgotPasswordLink');
     const passwordToggles = document.querySelectorAll('.password-toggle');
     const forms = document.querySelectorAll('.form');
-    
+
     // Éléments spécifiques aux formulaires
     const loginForm = document.getElementById('loginFormElement');
     const registerForm = document.getElementById('registerFormElement');
     const forgotForm = document.getElementById('forgotFormElement');
-    
+
     // Éléments de validation
     const registerPassword = document.getElementById('registerPassword');
     const confirmPassword = document.getElementById('confirmPassword');
@@ -23,22 +23,6 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeAuth();
 
     function initializeAuth() {
-        // Événements de changement de formulaire
-        switchFormLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                switchForm(link.dataset.target);
-            });
-        });
-
-        // Lien mot de passe oublié
-        if (forgotPasswordLink) {
-            forgotPasswordLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                switchForm('forgotForm');
-            });
-        }
-
         // Basculement des mots de passe
         passwordToggles.forEach(toggle => {
             toggle.addEventListener('click', togglePasswordVisibility);
@@ -53,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (registerPassword) {
             registerPassword.addEventListener('input', checkPasswordStrength);
         }
-        
+
         if (confirmPassword) {
             confirmPassword.addEventListener('input', checkPasswordMatch);
         }
@@ -64,34 +48,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // Animation d'entrée
         animateFormEntrance();
     }
-
-    function switchForm(targetFormId) {
-        const currentFormElement = document.getElementById(currentForm);
-        const targetFormElement = document.getElementById(targetFormId);
-
-        if (!currentFormElement || !targetFormElement) return;
-
-        // Animation de sortie
-        currentFormElement.style.transform = 'translateX(-20px)';
-        currentFormElement.style.opacity = '0';
-
-        setTimeout(() => {
-            currentFormElement.classList.remove('active');
-            targetFormElement.classList.add('active');
-            
-            // Animation d'entrée
-            targetFormElement.style.transform = 'translateX(20px)';
-            targetFormElement.style.opacity = '0';
-            
-            setTimeout(() => {
-                targetFormElement.style.transform = 'translateX(0)';
-                targetFormElement.style.opacity = '1';
-            }, 50);
-        }, 200);
-
-        currentForm = targetFormId;
-    }
-
     function togglePasswordVisibility(e) {
         const button = e.currentTarget;
         const input = button.previousElementSibling;
@@ -114,11 +70,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function handleLogin(e) {
         e.preventDefault();
-        
-        const email = document.getElementById('loginEmail').value;
+
         const password = document.getElementById('loginPassword').value;
-        const rememberMe = document.getElementById('rememberMe').checked;
-        const submitBtn = e.target.querySelector('button[type="submit"]');
 
         // Validation basique
         if (!validateEmail(email)) {
@@ -126,8 +79,8 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        if (password.length < 6) {
-            showFieldError('loginPassword', 'Le mot de passe doit contenir au moins 6 caractères');
+        if (password.length < 8) {
+            showFieldError('loginPassword', 'Le mot de passe doit contenir au moins 8 caractères');
             return;
         }
 
@@ -137,10 +90,10 @@ document.addEventListener('DOMContentLoaded', function() {
         // Simulation de la connexion
         setTimeout(() => {
             setButtonLoading(submitBtn, false);
-            
+
             // Simuler une connexion réussie
             showNotification('Connexion réussie! Redirection en cours...', 'success');
-            
+
             setTimeout(() => {
                 window.location.href = 'index.html';
             }, 1500);
@@ -149,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function handleRegister(e) {
         e.preventDefault();
-        
+
         const firstName = document.getElementById('firstName').value;
         const lastName = document.getElementById('lastName').value;
         const email = document.getElementById('registerEmail').value;
@@ -199,10 +152,10 @@ document.addEventListener('DOMContentLoaded', function() {
         // Simulation de l'inscription
         setTimeout(() => {
             setButtonLoading(submitBtn, false);
-            
+
             // Simuler une inscription réussie
             showNotification('Compte créé avec succès! Vérifiez votre email.', 'success');
-            
+
             setTimeout(() => {
                 switchForm('loginForm');
             }, 2000);
@@ -211,7 +164,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function handleForgotPassword(e) {
         e.preventDefault();
-        
+
         const email = document.getElementById('forgotEmail').value;
         const submitBtn = e.target.querySelector('button[type="submit"]');
 
@@ -226,9 +179,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // Simulation de l'envoi
         setTimeout(() => {
             setButtonLoading(submitBtn, false);
-            
+
             showNotification('Lien de réinitialisation envoyé! Vérifiez votre email.', 'success');
-            
+
             setTimeout(() => {
                 switchForm('loginForm');
             }, 2000);
@@ -247,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         const strength = calculatePasswordStrength(password);
-        
+
         strengthFill.className = `strength-fill ${strength.level}`;
         strengthText.textContent = strength.text;
         strengthText.style.color = strength.color;
@@ -255,11 +208,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function calculatePasswordStrength(password) {
         let score = 0;
-        
+
         // Longueur
         if (password.length >= 8) score += 25;
         if (password.length >= 12) score += 25;
-        
+
         // Caractères
         if (/[a-z]/.test(password)) score += 10;
         if (/[A-Z]/.test(password)) score += 15;
@@ -298,7 +251,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Validation email en temps réel
         const emailInputs = document.querySelectorAll('input[type="email"]');
         emailInputs.forEach(input => {
-            input.addEventListener('blur', function() {
+            input.addEventListener('blur', function () {
                 if (this.value && !validateEmail(this.value)) {
                     showFieldError(this.id, 'Format d\'email invalide');
                 } else if (this.value) {
@@ -310,7 +263,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Validation des champs requis
         const requiredInputs = document.querySelectorAll('input[required]');
         requiredInputs.forEach(input => {
-            input.addEventListener('blur', function() {
+            input.addEventListener('blur', function () {
                 if (!this.value.trim()) {
                     showFieldError(this.id, 'Ce champ est requis');
                 } else {
@@ -318,7 +271,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
 
-            input.addEventListener('input', function() {
+            input.addEventListener('input', function () {
                 if (this.value.trim()) {
                     clearFieldError(this.id);
                 }
@@ -355,7 +308,7 @@ document.addEventListener('DOMContentLoaded', function() {
             </svg>
             ${message}
         `;
-        
+
         field.parentNode.parentNode.appendChild(errorDiv);
     }
 
@@ -382,7 +335,7 @@ document.addEventListener('DOMContentLoaded', function() {
             </svg>
             ${message}
         `;
-        
+
         field.parentNode.parentNode.appendChild(successDiv);
     }
 
@@ -419,7 +372,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (activeForm) {
             activeForm.style.opacity = '0';
             activeForm.style.transform = 'translateY(20px)';
-            
+
             setTimeout(() => {
                 activeForm.style.transition = 'all 0.6s ease';
                 activeForm.style.opacity = '1';
@@ -429,7 +382,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Gestion des raccourcis clavier
-    document.addEventListener('keydown', function(e) {
+    document.addEventListener('keydown', function (e) {
         if (e.key === 'Enter' && e.ctrlKey) {
             const activeForm = document.querySelector('.auth-form.active form');
             if (activeForm) {

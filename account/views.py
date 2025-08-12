@@ -7,6 +7,8 @@ from django.shortcuts import render, redirect
 
 def login_user(request):
     if request.method == 'POST':
+        email = request.POST.get('loginEmail')
+        password = request.POST.get('loginPassword')
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
