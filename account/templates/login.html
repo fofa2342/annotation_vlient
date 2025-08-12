@@ -23,7 +23,7 @@
             >
           </li>
           <li class="nav-item">
-            <a href="{% url 'account:register' %}" class="nav-link"
+            <a href="{% url 'account:register' %}" class="nav-link active"
               >Inscription</a
             >
           </li>
@@ -39,6 +39,9 @@
 
     <!-- Main Content -->
     <main class="auth-main">
+      {% for message in messages %}
+      <p>{{ message }}</p>
+      {% endfor %}
       <div class="auth-container">
         <!-- Left Side - Branding -->
         <div class="auth-branding">
