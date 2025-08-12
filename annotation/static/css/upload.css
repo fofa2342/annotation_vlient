@@ -1,6 +1,21 @@
+:root {
+  --primary-green: #2a9d8f;       /* vert principal */
+  --secondary-green: #264653;     /* vert secondaire plus foncé */
+  --light-green: #a8dadc;         /* vert clair / pastel */
+  --white: #ffffff;
+  --dark-gray: #333333;
+  --gray: #777777;
+  --light-gray: #f0f0f0;
+  --border-radius: 8px;
+  --shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --transition: all 0.3s ease;
+  --border-color: #ddd;
+}
+
 /* Upload Header */
 .upload-header {
-    background: linear-gradient(135deg, var(--light-blue) 0%, var(--white) 100%);
+    background: linear-gradient(135deg, var(--light-green) 0%, var(--white) 100%);
     padding: 120px 0 60px;
     margin-top: 70px;
     text-align: center;
@@ -44,21 +59,21 @@
 }
 
 .upload-zone:hover {
-    border-color: var(--primary-blue);
-    background-color: var(--light-blue);
+    border-color: var(--primary-green);
+    background-color: var(--light-green);
     transform: translateY(-2px);
 }
 
 .upload-zone.dragover {
-    border-color: var(--primary-blue);
-    background-color: var(--light-blue);
+    border-color: var(--primary-green);
+    background-color: var(--light-green);
     transform: scale(1.02);
     box-shadow: var(--shadow-lg);
 }
 
 .upload-zone.has-file {
-    border-color: var(--primary-blue);
-    background-color: var(--light-blue);
+    border-color: var(--primary-green);
+    background-color: var(--light-green);
 }
 
 .upload-icon {
@@ -80,7 +95,7 @@
 }
 
 .upload-link {
-    color: var(--primary-blue);
+    color: var(--primary-green);
     font-weight: 600;
     cursor: pointer;
     text-decoration: underline;
@@ -94,7 +109,7 @@
 }
 
 .format-tag {
-    background-color: var(--primary-blue);
+    background-color: var(--primary-green);
     color: var(--white);
     padding: 4px 12px;
     border-radius: 20px;
@@ -225,7 +240,7 @@
 
 .progress-percentage {
     font-weight: 700;
-    color: var(--primary-blue);
+    color: var(--primary-green);
     font-size: 1.1rem;
 }
 
@@ -240,7 +255,7 @@
 
 .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+    background: linear-gradient(90deg, var(--primary-green) 0%, var(--secondary-green) 100%);
     width: 0%;
     transition: width 0.3s ease;
     position: relative;
@@ -282,6 +297,16 @@
     gap: 10px;
     font-size: 1.1rem;
     padding: 15px 30px;
+    background-color: var(--primary-green);
+    color: var(--white);
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-upload:hover:not(:disabled) {
+    background-color: var(--secondary-green);
 }
 
 .btn-upload:disabled {
@@ -327,7 +352,7 @@
 .instruction-icon {
     flex-shrink: 0;
     padding: 10px;
-    background-color: var(--light-blue);
+    background-color: var(--light-green);
     border-radius: var(--border-radius);
 }
 
@@ -357,8 +382,8 @@
 
 .upload-success {
     animation: uploadSuccess 0.6s ease-out;
-    border-color: #10b981 !important;
-    background-color: #d1fae5 !important;
+    border-color: var(--primary-green) !important;
+    background-color: #d1fae5 !important; /* pastel vert clair */
 }
 
 /* Responsive */
@@ -428,4 +453,3 @@
         justify-content: center;
     }
 }
-

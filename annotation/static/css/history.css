@@ -1,6 +1,6 @@
 /* History Header */
 .history-header {
-    background: linear-gradient(135deg, var(--light-blue) 0%, var(--white) 100%);
+    background: linear-gradient(135deg, var(--light-green) 0%, var(--white) 100%);
     padding: 120px 0 60px;
     margin-top: 70px;
 }
@@ -39,7 +39,7 @@
     display: block;
     font-size: 2.5rem;
     font-weight: 700;
-    color: var(--primary-blue);
+    color: var(--primary-green);
     margin-bottom: 5px;
 }
 
@@ -91,8 +91,8 @@
 
 .search-box input:focus {
     outline: none;
-    border-color: var(--primary-blue);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
 }
 
 .filter-group {
@@ -116,7 +116,7 @@
 .filter-select:focus,
 .sort-select:focus {
     outline: none;
-    border-color: var(--primary-blue);
+    border-color: var(--primary-green);
 }
 
 .view-controls {
@@ -139,7 +139,7 @@
 
 .view-btn.active {
     background-color: var(--white);
-    color: var(--primary-blue);
+    color: var(--primary-green);
     box-shadow: var(--shadow);
 }
 
@@ -202,7 +202,7 @@
 }
 
 .analysis-card.selected {
-    border: 2px solid var(--primary-blue);
+    border: 2px solid var(--primary-green);
 }
 
 .card-checkbox {
@@ -220,7 +220,7 @@
 
 .card-image {
     height: 200px;
-    background: linear-gradient(135deg, var(--light-blue) 0%, var(--border-color) 100%);
+    background: linear-gradient(135deg, var(--light-green) 0%, var(--border-color) 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -279,7 +279,7 @@
 
 .confidence-score {
     font-weight: 700;
-    color: var(--primary-blue);
+    color: var(--primary-green);
     font-size: 1.1rem;
 }
 
@@ -304,21 +304,21 @@
 }
 
 .action-btn.primary {
-    background-color: var(--primary-blue);
+    background-color: var(--primary-green);
     color: var(--white);
 }
 
 .action-btn.primary:hover {
-    background-color: var(--dark-blue);
+    background-color: var(--dark-green);
 }
 
 .action-btn.secondary {
-    background-color: var(--light-blue);
-    color: var(--primary-blue);
+    background-color: var(--light-green);
+    color: var(--primary-green);
 }
 
 .action-btn.secondary:hover {
-    background-color: var(--primary-blue);
+    background-color: var(--primary-green);
     color: var(--white);
 }
 
@@ -378,7 +378,7 @@
 }
 
 .list-item.selected {
-    background-color: var(--light-blue);
+    background-color: var(--light-green);
 }
 
 .list-item:last-child {
@@ -443,7 +443,7 @@
 
 .item-confidence {
     font-weight: 600;
-    color: var(--primary-blue);
+    color: var(--primary-green);
 }
 
 .item-actions {
@@ -480,8 +480,8 @@
 }
 
 .pagination-btn:hover:not(:disabled) {
-    border-color: var(--primary-blue);
-    color: var(--primary-blue);
+    border-color: var(--primary-green);
+    color: var(--primary-green);
 }
 
 .pagination-btn:disabled {
@@ -518,7 +518,7 @@
 }
 
 .empty-state a {
-    color: var(--primary-blue);
+    color: var(--primary-green);
     text-decoration: none;
     font-weight: 600;
 }
@@ -702,4 +702,3 @@
         justify-content: center;
     }
 }
-

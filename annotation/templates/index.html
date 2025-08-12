@@ -1,5 +1,12 @@
 {% load static %}
 
+{% if user.is_authenticated %}
+  <p>connecté sous {{ user.username}} <a href= "{% url 'account:logout' %}" >Se deconnecter </a> </p>
+{% else %}
+  <p><a href= "{% url 'account:login' %}" >Se connecter </a>
+    <a href= "{% url 'account:register' %}" >Créer un compte </a></p>
+{% endif %}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -25,9 +32,6 @@
           </li>
           <li class="nav-item">
             <a href="{% url 'historique' %}" class="nav-link">Historique</a>
-          </li>
-          <li class="nav-item">
-            <a href="{% url 'login' %}" class="nav-link">Connexion</a>
           </li>
         </ul>
         <div class="hamburger">
@@ -183,7 +187,7 @@
           </div>
         </div>
         <div class="view-all">
-          <a href="history.html" class="btn btn-outline"
+          <a href="{% url 'historique' %}" class="btn btn-outline"
             >Voir tout l'historique</a
           >
         </div>
