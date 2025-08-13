@@ -40,7 +40,9 @@
     <!-- Main Content -->
     <main class="auth-main">
       {% for message in messages %}
-      <p>{{ message }}</p>
+      <div class="alert alert-danger" role="alert">
+        <p>{{ message }}</p>
+      </div>
       {% endfor %}
       <div class="auth-container">
         <!-- Left Side - Branding -->
@@ -150,7 +152,9 @@
             >
               {% csrf_token %}
               <div class="form-group">
-                <label for="loginEmail" class="form-label">Email</label>
+                <label for="username" class="form-label"
+                  >Nom d'utilisateur</label
+                >
                 <div class="input-group">
                   <svg
                     width="20"
@@ -175,20 +179,18 @@
                     />
                   </svg>
                   <input
-                    type="email"
-                    id="loginEmail"
-                    name="loginEmail"
+                    type="text"
+                    id="username"
+                    name="username"
                     class="form-input"
-                    placeholder="votre@email.com"
+                    placeholder="nom d'utilisateur"
                     required
                   />
                 </div>
               </div>
 
               <div class="form-group">
-                <label for="loginPassword" class="form-label"
-                  >Mot de passe</label
-                >
+                <label for="password" class="form-label">Mot de passe</label>
                 <div class="input-group">
                   <svg
                     width="20"
@@ -219,9 +221,9 @@
                   </svg>
                   <input
                     type="password"
-                    id="loginPassword"
+                    id="password"
                     class="form-input"
-                    name="loginPassword"
+                    name="password"
                     placeholder="••••••••"
                     required
                   />

@@ -1,12 +1,5 @@
 {% load static %}
 
-{% if user.is_authenticated %}
-  <p>connecté sous {{ user.username}} <a href= "{% url 'account:logout' %}" >Se deconnecter </a> </p>
-{% else %}
-  <p><a href= "{% url 'account:login' %}" >Se connecter </a>
-    <a href= "{% url 'account:register' %}" >Créer un compte </a></p>
-{% endif %}
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -42,6 +35,7 @@
       </div>
     </nav>
 
+    
     <!-- Hero Section -->
     <section class="hero">
       <div class="hero-container">
@@ -50,41 +44,32 @@
             Annotation Automatique de Données Médicales
           </h1>
           <p class="hero-subtitle">
-            Analysez vos images médicales avec l'intelligence artificielle
+            Analysez et annotez rapidement vos images médicales
           </p>
           <a href="{% url "upload" %}" class="btn btn-primary hero-btn"
-            >Commencer l'analyse</a
+          >Commencer l'analyse</a
           >
         </div>
         <div class="hero-image">
           <div class="medical-icon">
-            <svg
-              width="200"
-              height="200"
-              viewBox="0 0 200 200"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <circle
-                cx="100"
-                cy="100"
-                r="80"
-                stroke="#2563eb"
-                stroke-width="4"
-                fill="none"
-              />
-              <path
-                d="M70 100h60M100 70v60"
-                stroke="#2563eb"
-                stroke-width="6"
-                stroke-linecap="round"
-              />
-            </svg>
+            <img src="{% static 'assets/logo1.png' %}" alt="MedAnnote Logo" width="280" height="280">
           </div>
         </div>
       </div>
     </section>
+    
+    {% if user.is_authenticated %}
+     <p>connecté sous {{ user.username}} <a href= "{% url 'account:logout' %}" >Se deconnecter </a> </p>
+    {% else %}
+      <p><a href= "{% url 'account:login' %}" >Se connecter </a>
+      <a href= "{% url 'account:register' %}" >Créer un compte </a></p>
+    {% endif %}
 
+    {% for message in messages %}
+      <div class="alert alert-danger" role="alert">
+        <p>{{ message }}</p>
+      </div>
+      {% endfor %}
     <!-- Quick Upload Section -->
     <section class="quick-upload">
       <div class="container">

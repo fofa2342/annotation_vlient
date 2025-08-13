@@ -1,274 +1,222 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Éléments DOM
-    const authForms = document.querySelectorAll(".auth-form");
-    const switchFormLinks = document.querySelectorAll(".switch-form"); // Keep if you have other forms to switch
-    const passwordToggles = document.querySelectorAll(".password-toggle");
-    const forms = document.querySelectorAll(".form");
-
-    // Éléments spécifiques aux formulaires
+    // --- Éléments du DOM ---
+    // On vérifie si les formulaires existent sur la page actuelle
     const loginForm = document.getElementById("loginFormElement");
     const registerForm = document.getElementById("registerFormElement");
-    const forgotForm = document.getElementById("forgotFormElement");
 
-    // Éléments de validation
-    const registerPassword = document.getElementById("registerPassword");
-    const confirmPassword = document.getElementById("confirmPassword");
-    const passwordStrength = document.getElementById("passwordStrength");
-
-    // Variables globales
-    let currentForm = "loginForm"; // Keep if you have other forms to switch
-
-    // Initialisation
-    initializeAuth();
-
-    function initializeAuth() {
-        // Basculement des mots de passe
-        passwordToggles.forEach(toggle => {
-            toggle.addEventListener("click", togglePasswordVisibility);
-        });
-
-        // Soumission des formulaires - IMPORTANT: No e.preventDefault() here, let Django handle it
-
-        // Validation des champs en temps réel
-        setupRealTimeValidation();
-
-        // Animation d'entrée
-        animateFormEntrance();
+    // --- Initialisation ---
+    // Le script s'exécute seulement si l'un des formulaires est présent
+    if (loginForm || registerForm) {
+        initializeAuthPage();
     }
 
-    function togglePasswordVisibility(e) {
-        const button = e.currentTarget;
-        const input = button.previousElementSibling;
-        const icon = button.querySelector("svg");
+    /**
+     * @function initializeAuthPage
+     * Fonction principale qui initialise toutes les fonctionnalités de la page.
+     */
+    function initializeAuthPage() {
+        // Active le basculement de la visibilité pour tous les champs de mot de passe
+        setupPasswordToggles();
+
+        // Met en place la validation en temps réel pour les champs du formulaire d'inscription
+        if (registerForm) {
+            setupRegistrationValidation();
+        }
+
+        // Ajoute une animation d'entrée au formulaire actif
+        animateFormEntrance();
+
+        // Gère l'état de chargement du bouton lors de la soumission du formulaire
+        const currentForm = loginForm || registerForm;
+        currentForm.addEventListener("submit", function () {
+            const submitButton = currentForm.querySelector("button[type='submit']");
+            if (submitButton) {
+                setButtonLoading(submitButton, true);
+            }
+        });
+    }
+
+    // --- Fonctions de Configuration ---
+
+    /**
+     * @function setupPasswordToggles
+     * Ajoute des écouteurs d'événements aux boutons pour afficher/masquer le mot de passe.
+     */
+    function setupPasswordToggles() {
+        document.querySelectorAll(".password-toggle").forEach(toggle => {
+            toggle.addEventListener("click", function () {
+                const input = this.previousElementSibling;
+                if (input && input.type) {
+                    togglePasswordVisibility(input, this);
+                }
+            });
+        });
+    }
+
+    /**
+     * @function setupRegistrationValidation
+     * Configure les écouteurs pour la validation en direct du formulaire d'inscription.
+     */
+    function setupRegistrationValidation() {
+        const passwordInput = document.getElementById("id_password1");
+        const confirmPasswordInput = document.getElementById("id_password2");
+        const emailInput = document.getElementById("id_email");
+
+        if (passwordInput && confirmPasswordInput) {
+            passwordInput.addEventListener("input", () => checkPasswordMatch(passwordInput, confirmPasswordInput));
+            confirmPasswordInput.addEventListener("input", () => checkPasswordMatch(passwordInput, confirmPasswordInput));
+        }
+
+        if (emailInput) {
+            emailInput.addEventListener("blur", () => validateEmailField(emailInput));
+        }
+    }
+
+    // --- Fonctions Utilitaires ---
+
+    /**
+     * @function togglePasswordVisibility
+     * Change le type de l'input (password/text) et met à jour l'icône.
+     * @param {HTMLInputElement} input - Le champ du mot de passe.
+     * @param {HTMLElement} toggleButton - Le bouton avec les icônes.
+     */
+    function togglePasswordVisibility(input, toggleButton) {
+        const eyeOpen = toggleButton.querySelector(".eye-open");
+        const eyeClosed = toggleButton.querySelector(".eye-closed");
 
         if (input.type === "password") {
             input.type = "text";
-            icon.innerHTML = `
-                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <line x1="1" y1="1" x2="23" y2="23" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            `;
+            eyeOpen.style.display = "none";
+            eyeClosed.style.display = "block";
         } else {
             input.type = "password";
-            icon.innerHTML = `
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <circle cx="12" cy="12" r="3" stroke="#64748b" stroke-width="2" fill="none"/>
-            `;
+            eyeOpen.style.display = "block";
+            eyeClosed.style.display = "none";
         }
     }
 
-    function checkPasswordStrength() {
-        const password = registerPassword.value;
-        const strengthFill = passwordStrength.querySelector(".strength-fill");
-        const strengthText = passwordStrength.querySelector(".strength-text");
-
-        if (password.length === 0) {
-            strengthFill.className = "strength-fill";
-            strengthText.textContent = "Saisissez un mot de passe";
+    /**
+     * @function checkPasswordMatch
+     * Vérifie si les deux champs de mot de passe correspondent.
+     * @param {HTMLInputElement} pass1 - Premier champ de mot de passe.
+     * @param {HTMLInputElement} pass2 - Second champ de mot de passe (confirmation).
+     */
+    function checkPasswordMatch(pass1, pass2) {
+        if (pass2.value.length === 0) {
+            clearFieldError(pass2);
             return;
         }
-
-        const strength = calculatePasswordStrength(password);
-
-        strengthFill.className = `strength-fill ${strength.level}`;
-        strengthText.textContent = strength.text;
-        strengthText.style.color = strength.color;
-    }
-
-    function calculatePasswordStrength(password) {
-        let score = 0;
-
-        // Longueur
-        if (password.length >= 8) score += 25;
-        if (password.length >= 12) score += 25;
-
-        // Caractères
-        if (/[a-z]/.test(password)) score += 10;
-        if (/[A-Z]/.test(password)) score += 15;
-        if (/[0-9]/.test(password)) score += 15;
-        if (/[^A-Za-z0-9]/.test(password)) score += 10;
-
-        if (score < 30) {
-            return { level: "weak", text: "Faible", color: "#ef4444" };
-        } else if (score < 60) {
-            return { level: "fair", text: "Moyen", color: "#f59e0b" };
-        } else if (score < 90) {
-            return { level: "good", text: "Bon", color: "#3b82f6" };
+        if (pass1.value === pass2.value) {
+            showFieldSuccess(pass2, "Les mots de passe correspondent.");
         } else {
-            return { level: "strong", text: "Fort", color: "#10b981" };
+            showFieldError(pass2, "Les mots de passe ne correspondent pas.");
         }
     }
 
-    function isPasswordStrong(password) {
-        return calculatePasswordStrength(password).level !== "weak";
-    }
-
-    function checkPasswordMatch() {
-        const password = registerPassword.value;
-        const confirm = confirmPassword.value;
-
-        if (confirm.length === 0) return;
-
-        if (password === confirm) {
-            showFieldSuccess("confirmPassword", "Les mots de passe correspondent");
+    /**
+     * @function validateEmailField
+     * Valide le format de l'email lors de la perte de focus.
+     * @param {HTMLInputElement} emailInput - Le champ de l'email.
+     */
+    function validateEmailField(emailInput) {
+        const emailRegex = /^[^@]+@[^@] +\.[^@] + $ /;
+        if (emailInput.value.length > 0 && !emailRegex.test(emailInput.value)) {
+            showFieldError(emailInput, "Format d'email invalide.");
         } else {
-            showFieldError("confirmPassword", "Les mots de passe ne correspondent pas");
+            clearFieldError(emailInput);
         }
     }
 
-    function setupRealTimeValidation() {
-        // Validation email en temps réel
-        const emailInputs = document.querySelectorAll("input[type='email']");
-        emailInputs.forEach(input => {
-            input.addEventListener("blur", function () {
-                if (this.value && !validateEmail(this.value)) {
-                    showFieldError(this.id, "Format d'email invalide");
-                } else if (this.value) {
-                    clearFieldError(this.id);
-                }
-            });
-        });
-
-        // Validation des champs requis
-        const requiredInputs = document.querySelectorAll("input[required]");
-        requiredInputs.forEach(input => {
-            input.addEventListener("blur", function () {
-                if (!this.value.trim()) {
-                    showFieldError(this.id, "Ce champ est requis");
-                } else {
-                    clearFieldError(this.id);
-                }
-            });
-
-            input.addEventListener("input", function () {
-                if (this.value.trim()) {
-                    clearFieldError(this.id);
-                }
-            });
-        });
+    /**
+     * @function setButtonLoading
+     * Gère l'état visuel (chargement/normal) d'un bouton.
+     * @param {HTMLButtonElement} button - Le bouton à modifier.
+     * @param {boolean} isLoading - True pour afficher le chargement, false pour revenir à la normale.
+     */
+    function setButtonLoading(button, isLoading) {
+        button.disabled = isLoading;
+        if (isLoading) {
+            button.classList.add("loading");
+            button.dataset.originalText = button.innerHTML;
+            button.innerHTML = '<span class="loading-spinner"></span> Chargement...';
+        } else {
+            button.classList.remove("loading");
+            if (button.dataset.originalText) {
+                button.innerHTML = button.dataset.originalText;
+            }
+        }
     }
 
-    function validateEmail(email) {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
-    }
+    // --- Fonctions d'Affichage des Erreurs/Succès ---
 
-    function showFieldError(fieldId, message) {
-        const field = document.getElementById(fieldId);
-        if (!field) return;
-
+    /**
+     * @function showFieldError
+     * Affiche un message d'erreur sous un champ de formulaire.
+     * @param {HTMLElement} field - Le champ concerné.
+     * @param {string} message - Le message d'erreur à afficher.
+     */
+    function showFieldError(field, message) {
+        clearFieldError(field); // Évite les doublons
         field.classList.add("error");
         field.classList.remove("success");
 
-        // Supprimer l'ancien message d'erreur
-        const existingError = field.parentNode.parentNode.querySelector(".error-message");
-        if (existingError) {
-            existingError.remove();
-        }
-
-        // Ajouter le nouveau message d'erreur
         const errorDiv = document.createElement("div");
         errorDiv.className = "error-message";
-        errorDiv.innerHTML = `
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
-                <line x1="15" y1="9" x2="9" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                <line x1="9" y1="9" x2="15" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-            ${message}
-        `;
+        errorDiv.textContent = message;
 
-        field.parentNode.parentNode.appendChild(errorDiv);
+        // Insère le message après le groupe d'input
+        field.closest(".input-group").insertAdjacentElement("afterend", errorDiv);
     }
 
-    function showFieldSuccess(fieldId, message) {
-        const field = document.getElementById(fieldId);
-        if (!field) return;
-
+    /**
+     * @function showFieldSuccess
+     * Affiche un message de succès sous un champ de formulaire.
+     * @param {HTMLElement} field - Le champ concerné.
+     * @param {string} message - Le message de succès à afficher.
+     */
+    function showFieldSuccess(field, message) {
+        clearFieldError(field);
         field.classList.add("success");
         field.classList.remove("error");
 
-        // Supprimer l'ancien message
-        const existingMessage = field.parentNode.parentNode.querySelector(".error-message, .success-message");
-        if (existingMessage) {
-            existingMessage.remove();
-        }
-
-        // Ajouter le message de succès
         const successDiv = document.createElement("div");
         successDiv.className = "success-message";
-        successDiv.innerHTML = `
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <polyline points="22,4 12,14.01 9,11.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            ${message}
-        `;
+        successDiv.textContent = message;
 
-        field.parentNode.parentNode.appendChild(successDiv);
+        field.closest(".input-group").insertAdjacentElement("afterend", successDiv);
     }
 
-    function clearFieldError(fieldId) {
-        const field = document.getElementById(fieldId);
-        if (!field) return;
-
+    /**
+     * @function clearFieldError
+     * Supprime tout message d'erreur ou de succès associé à un champ.
+     * @param {HTMLElement} field - Le champ concerné.
+     */
+    function clearFieldError(field) {
         field.classList.remove("error", "success");
-
-        // Supprimer les messages
-        const messages = field.parentNode.parentNode.querySelectorAll(".error-message, .success-message");
-        messages.forEach(msg => msg.remove());
-    }
-
-    function setButtonLoading(button, loading) {
-        const btnText = button.querySelector(".btn-text");
-        const btnLoader = button.querySelector(".btn-loader");
-
-        if (loading) {
-            button.classList.add("loading");
-            button.disabled = true;
-            btnText.style.opacity = "0";
-            btnLoader.style.display = "block";
-        } else {
-            button.classList.remove("loading");
-            button.disabled = false;
-            btnText.style.opacity = "1";
-            btnLoader.style.display = "none";
+        const formGroup = field.closest(".form-group");
+        const message = formGroup.querySelector(".error-message, .success-message");
+        if (message) {
+            message.remove();
         }
     }
 
+    // --- Animation ---
+
+    /**
+     * @function animateFormEntrance
+     * Applique une animation de fondu et de translation au formulaire actif.
+     */
     function animateFormEntrance() {
         const activeForm = document.querySelector(".auth-form.active");
         if (activeForm) {
             activeForm.style.opacity = "0";
             activeForm.style.transform = "translateY(20px)";
-
             setTimeout(() => {
-                activeForm.style.transition = "all 0.6s ease";
+                activeForm.style.transition = "all 0.5s ease-out";
                 activeForm.style.opacity = "1";
                 activeForm.style.transform = "translateY(0)";
             }, 100);
         }
     }
-
-    // Gestion des raccourcis clavier
-    document.addEventListener("keydown", function (e) {
-        if (e.key === "Enter" && e.ctrlKey) {
-            const activeForm = document.querySelector(".auth-form.active form");
-            if (activeForm) {
-                activeForm.dispatchEvent(new Event("submit"));
-            }
-        }
-    });
-
-    // Animation de la marque au chargement
-    setTimeout(() => {
-        const brandLogo = document.querySelector(".brand-logo svg");
-        if (brandLogo) {
-            brandLogo.style.transform = "scale(1.1)";
-            setTimeout(() => {
-                brandLogo.style.transform = "scale(1)";
-            }, 300);
-        }
-    }, 1000);
 });
-
 

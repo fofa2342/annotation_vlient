@@ -1,42 +1,46 @@
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout
 from django.contrib import messages
 from django.shortcuts import render, redirect
-
-# Create your views here.
+from .forms import CustomUserCreationForm
 
 def login_user(request):
+    if request.user.is_authenticated:
+        return redirect('index')
+        
     if request.method == 'POST':
-        email = request.POST.get('loginEmail')
-        password = request.POST.get('loginPassword')
-        form = AuthenticationForm(request, email=email, password=password)
+        form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            messages.info(request, f"Welcome back, {user.username}!")
+            messages.info(request, f"Bienvenue, {user.username}!")
             return redirect('index')
         else:
-            messages.error(request, "Invalid username or password.")
+            messages.error(request, "Nom d'utilisateur ou mot de passe invalide.")
     else:
         form = AuthenticationForm()
     return render(request, "login.html", {"form": form})
 
 def logout_user(request):
     logout(request)
-    messages.info(request, "You have successfully logged out.")
-    return redirect('index')
+    messages.info(request, "Vous avez été déconnecté avec succès.")
+    return redirect('account:login')
 
 def register_user(request):
+    if request.user.is_authenticated:
+        return redirect('index')
+        
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
-            messages.success(request, "Registration successful. You are now logged in.")
+            messages.success(request, f"Bienvenue, {user.first_name}! Votre compte a été créé.")
             return redirect("index")
         else:
-            messages.error(request, "Please correct the errors below.")
+            # Pass form with errors directly to template
+            return render(request, "register.html", {"form": form})
     else:
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
     return render(request, "register.html", {"form": form})

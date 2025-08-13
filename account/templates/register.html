@@ -40,87 +40,17 @@
     </nav>
 
     <!-- Main Content -->
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}" role="alert">
+      <p>{{ message }}</p>
+    </div>
+    {% endfor %}
+
     <main class="auth-main">
       <div class="auth-container">
         <!-- Left Side - Branding -->
         <div class="auth-branding">
-          <div class="branding-content">
-            <div class="brand-logo">
-              <svg
-                width="80"
-                height="80"
-                viewBox="0 0 200 200"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <circle
-                  cx="100"
-                  cy="100"
-                  r="80"
-                  stroke="#2563eb"
-                  stroke-width="8"
-                  fill="none"
-                />
-                <path
-                  d="M70 100h60M100 70v60"
-                  stroke="#2563eb"
-                  stroke-width="12"
-                  stroke-linecap="round"
-                />
-              </svg>
-            </div>
-            <h1 class="brand-title">MedAnnote</h1>
-            <p class="brand-subtitle">
-              Plateforme d'annotation automatique de données médicales
-            </p>
-            <div class="brand-features">
-              <div class="feature-item">
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
-                    fill="#2563eb"
-                  />
-                </svg>
-                <span>Annotation rapide et précise</span>
-              </div>
-              <div class="feature-item">
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
-                    fill="#2563eb"
-                  />
-                </svg>
-                <span>Collaboration en temps réel</span>
-              </div>
-              <div class="feature-item">
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
-                    fill="#2563eb"
-                  />
-                </svg>
-                <span>Exportation facile des données</span>
-              </div>
-            </div>
-          </div>
+          <!-- ... (keep existing branding content) ... -->
         </div>
 
         <!-- Right Side - Registration Form -->
@@ -131,37 +61,138 @@
               Rejoignez notre plateforme pour commencer à annoter vos données
               médicales.
             </p>
+
             <form
               class="form"
               action="{% url 'account:register' %}"
               method="post"
+              id="registerForm"
             >
-              {% csrf_token %}
+              {% csrf_token %} {% if form.non_field_errors %}
+              <div class="alert alert-danger">
+                {% for error in form.non_field_errors %}
+                <p>{{ error }}</p>
+                {% endfor %}
+              </div>
+              {% endif %}
+
+              <!-- First Name -->
               <div class="form-group">
-                <label for="first_name" class="form-label">Prénom</label>
+                <label
+                  for="{{ form.first_name.id_for_label }}"
+                  class="form-label"
+                  >Prénom</label
+                >
                 <div class="input-group">
-                <input
-                  type="text"
-                  id="first_name"
-                  name="first_name"
-                  class="form-input"
-                  placeholder="Entrez votre prénom"
-                  required
-                />
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
+                      stroke="#64748b"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <circle
+                      cx="12"
+                      cy="7"
+                      r="4"
+                      stroke="#64748b"
+                      stroke-width="2"
+                      fill="none"
+                    />
+                  </svg>
+                  {{ form.first_name }}
+                </div>
+                {% if form.first_name.errors %}
+                <div class="error-message">{{ form.first_name.errors.0 }}</div>
+                {% endif %}
               </div>
+
+              <!-- Last Name -->
               <div class="form-group">
-                <label for="last_name" class="form-label">Nom</label>
-                <input
-                  type="text"
-                  id="last_name"
-                  name="last_name"
-                  class="form-input"
-                  placeholder="Entrez votre nom"
-                  required
-                />
+                <label
+                  for="{{ form.last_name.id_for_label }}"
+                  class="form-label"
+                  >Nom</label
+                >
+                <div class="input-group">
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
+                      stroke="#64748b"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <circle
+                      cx="12"
+                      cy="7"
+                      r="4"
+                      stroke="#64748b"
+                      stroke-width="2"
+                      fill="none"
+                    />
+                  </svg>
+                  {{ form.last_name }}
+                </div>
+                {% if form.last_name.errors %}
+                <div class="error-message">{{ form.last_name.errors.0 }}</div>
+                {% endif %}
               </div>
+
+              <!-- Username -->
               <div class="form-group">
-                <label for="email" class="form-label">Email</label>
+                <label for="{{ form.username.id_for_label }}" class="form-label"
+                  >Nom d'utilisateur</label
+                >
+                <div class="input-group">
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
+                      stroke="#64748b"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <circle
+                      cx="12"
+                      cy="7"
+                      r="4"
+                      stroke="#64748b"
+                      stroke-width="2"
+                      fill="none"
+                    />
+                  </svg>
+                  {{ form.username }}
+                </div>
+                {% if form.username.errors %}
+                <div class="error-message">{{ form.username.errors.0 }}</div>
+                {% endif %}
+              </div>
+
+              <!-- Email -->
+              <div class="form-group">
+                <label for="{{ form.email.id_for_label }}" class="form-label"
+                  >Email</label
+                >
                 <div class="input-group">
                   <svg
                     width="20"
@@ -174,8 +205,7 @@
                       d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
                       stroke="#64748b"
                       stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      fill="none"
                     />
                     <polyline
                       points="22,6 12,13 2,6"
@@ -185,18 +215,18 @@
                       stroke-linejoin="round"
                     />
                   </svg>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    class="form-input"
-                    placeholder="votre@email.com"
-                    required
-                  />
+                  {{ form.email }}
                 </div>
+                {% if form.email.errors %}
+                <div class="error-message">{{ form.email.errors.0 }}</div>
+                {% endif %}
               </div>
+
+              <!-- Password 1 -->
               <div class="form-group">
-                <label for="password" class="form-label"
+                <label
+                  for="{{ form.password1.id_for_label }}"
+                  class="form-label"
                   >Créez un mot de passe</label
                 >
                 <div class="input-group">
@@ -227,20 +257,8 @@
                       stroke-linejoin="round"
                     />
                   </svg>
-                  <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    class="form-input"
-                    placeholder="••••••••"
-                    required
-                  />
-                  <button
-                    type="button"
-                    class="password-toggle"
-                    id="togglePassword"
-                  >
-                    <!-- Eye open icon (default state) -->
+                  {{ form.password1 }}
+                  <button type="button" class="password-toggle">
                     <svg
                       class="eye-open"
                       width="20"
@@ -255,7 +273,7 @@
                         stroke-width="2"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                      />
+                      ></path>
                       <circle
                         cx="12"
                         cy="12"
@@ -263,9 +281,8 @@
                         stroke="#64748b"
                         stroke-width="2"
                         fill="none"
-                      />
+                      ></circle>
                     </svg>
-                    <!-- Eye closed icon (hidden by default) -->
                     <svg
                       class="eye-closed"
                       width="20"
@@ -281,7 +298,7 @@
                         stroke-width="2"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                      />
+                      ></path>
                       <line
                         x1="1"
                         y1="1"
@@ -291,13 +308,20 @@
                         stroke-width="2"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                      />
+                      ></line>
                     </svg>
                   </button>
                 </div>
+                {% if form.password1.errors %}
+                <div class="error-message">{{ form.password1.errors.0 }}</div>
+                {% endif %}
               </div>
+
+              <!-- Password 2 -->
               <div class="form-group">
-                <label for="confirm_password" class="form-label"
+                <label
+                  for="{{ form.password2.id_for_label }}"
+                  class="form-label"
                   >Confirmer le mot de passe</label
                 >
                 <div class="input-group">
@@ -328,20 +352,8 @@
                       stroke-linejoin="round"
                     />
                   </svg>
-                  <input
-                    type="password"
-                    id="confirm_password"
-                    name="confirm_password"
-                    class="form-input"
-                    placeholder="••••••••"
-                    required
-                  />
-                  <button
-                    type="button"
-                    class="password-toggle"
-                    id="toggleConfirmPassword"
-                  >
-                    <!-- Eye open icon (default state) -->
+                  {{ form.password2 }}
+                  <button type="button" class="password-toggle">
                     <svg
                       class="eye-open"
                       width="20"
@@ -356,7 +368,7 @@
                         stroke-width="2"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                      />
+                      ></path>
                       <circle
                         cx="12"
                         cy="12"
@@ -364,9 +376,8 @@
                         stroke="#64748b"
                         stroke-width="2"
                         fill="none"
-                      />
+                      ></circle>
                     </svg>
-                    <!-- Eye closed icon (hidden by default) -->
                     <svg
                       class="eye-closed"
                       width="20"
@@ -382,7 +393,7 @@
                         stroke-width="2"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                      />
+                      ></path>
                       <line
                         x1="1"
                         y1="1"
@@ -392,14 +403,16 @@
                         stroke-width="2"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                      />
+                      ></line>
                     </svg>
                   </button>
                 </div>
+                {% if form.password2.errors %}
+                <div class="error-message">{{ form.password2.errors.0 }}</div>
+                {% endif %}
               </div>
 
-              <!-- Submit Button -->
-              <button type="submit" class="btn btn-primary">
+              <button type="submit" class="btn btn-primary" id="submitBtn">
                 Créer un compte
               </button>
             </form>
@@ -418,5 +431,6 @@
     </main>
 
     <script src="{% static 'js/common.js' %}"></script>
+    <script src="{% static 'js/register.js' %}"></script>
   </body>
 </html>
