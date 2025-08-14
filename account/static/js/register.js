@@ -15,7 +15,8 @@ document.addEventListener("DOMContentLoaded", function () {
     function setupPasswordToggles() {
         document.querySelectorAll(".password-toggle").forEach(toggle => {
             toggle.addEventListener("click", function () {
-                const input = this.closest('.input-group').querySelector('input');
+                const inputGroup = this.closest('.input-group');
+                const input = inputGroup.querySelector('input');
                 if (input) togglePasswordVisibility(input, this);
             });
         });
@@ -95,10 +96,16 @@ document.addEventListener("DOMContentLoaded", function () {
         button.disabled = isLoading;
         if (isLoading) {
             button.classList.add('loading');
-            button.innerHTML = '<span class="loading-spinner"></span> Création...';
+            const btnText = button.querySelector('.btn-text');
+            const btnLoader = button.querySelector('.btn-loader');
+            if (btnText) btnText.style.opacity = "0";
+            if (btnLoader) btnLoader.style.display = "block";
         } else {
             button.classList.remove('loading');
-            button.innerHTML = 'Créer un compte';
+            const btnText = button.querySelector('.btn-text');
+            const btnLoader = button.querySelector('.btn-loader');
+            if (btnText) btnText.style.opacity = "1";
+            if (btnLoader) btnLoader.style.display = "none";
         }
     }
 
@@ -106,16 +113,21 @@ document.addEventListener("DOMContentLoaded", function () {
         clearFieldError(field);
         field.classList.add("error");
 
+        const formGroup = field.closest('.form-group');
+        if (!formGroup) return;
+
         const errorDiv = document.createElement("div");
         errorDiv.className = "error-message";
         errorDiv.textContent = message;
 
-        field.closest('.form-group').appendChild(errorDiv);
+        formGroup.appendChild(errorDiv);
     }
 
     function clearFieldError(field) {
         field.classList.remove("error");
         const formGroup = field.closest('.form-group');
+        if (!formGroup) return;
+
         const errorMsg = formGroup.querySelector('.error-message');
         if (errorMsg) errorMsg.remove();
     }

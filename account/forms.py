@@ -7,20 +7,46 @@ class CustomUserCreationForm(UserCreationForm):
     first_name = forms.CharField(
         max_length=30, 
         required=True,
-        widget=forms.TextInput(attrs={'placeholder': 'Prénom'})
+        widget=forms.TextInput(attrs={
+            'class': 'form-input', 
+            'placeholder': 'Prénom'
+        })
     )
     last_name = forms.CharField(
         max_length=150, 
         required=True,
-        widget=forms.TextInput(attrs={'placeholder': 'Nom'})
+        widget=forms.TextInput(attrs={
+            'class': 'form-input', 
+            'placeholder': 'Nom'
+        })
     )
     email = forms.EmailField(
         max_length=254, 
         required=True,
-        widget=forms.EmailInput(attrs={'placeholder': 'votre@email.com'})
+        widget=forms.EmailInput(attrs={
+            'class': 'form-input', 
+            'placeholder': 'votre@email.com'
+        })
     )
     username = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': "Nom d'utilisateur"})
+        widget=forms.TextInput(attrs={
+            'class': 'form-input', 
+            'placeholder': "Nom d'utilisateur"
+        })
+    )
+    password1 = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-input', 
+            'placeholder': '••••••••',
+            'autocomplete': 'new-password'
+        })
+    )
+    password2 = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-input', 
+            'placeholder': '••••••••',
+            'autocomplete': 'new-password'
+        })
     )
 
     class Meta(UserCreationForm.Meta):

@@ -50,7 +50,67 @@
       <div class="auth-container">
         <!-- Left Side - Branding -->
         <div class="auth-branding">
-          <!-- ... (keep existing branding content) ... -->
+          <div class="branding-content">
+            <div class="brand-logo">
+              <img
+                src="{% static 'assets/logo.png' %}"
+                alt="MedAnnote Logo"
+                width="280"
+                height="280"
+              />
+            </div>
+            <h1 class="brand-title">MedAnnote</h1>
+            <p class="brand-subtitle">
+              Plateforme d'annotation automatique de données médicales
+            </p>
+            <div class="brand-features">
+              <div class="feature-item">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+                    fill="#2563eb"
+                  />
+                </svg>
+                <span>Annotation rapide et précise</span>
+              </div>
+              <div class="feature-item">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+                    fill="#2563eb"
+                  />
+                </svg>
+                <span>Collaboration en temps réel</span>
+              </div>
+              <div class="feature-item">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+                    fill="#2563eb"
+                  />
+                </svg>
+                <span>Exportation facile des données</span>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Right Side - Registration Form -->
@@ -85,6 +145,7 @@
                 >
                 <div class="input-group">
                   <svg
+                    class="input-icon"
                     width="20"
                     height="20"
                     viewBox="0 0 24 24"
@@ -123,6 +184,7 @@
                 >
                 <div class="input-group">
                   <svg
+                    class="input-icon"
                     width="20"
                     height="20"
                     viewBox="0 0 24 24"
@@ -159,6 +221,7 @@
                 >
                 <div class="input-group">
                   <svg
+                    class="input-icon"
                     width="20"
                     height="20"
                     viewBox="0 0 24 24"
@@ -195,6 +258,7 @@
                 >
                 <div class="input-group">
                   <svg
+                    class="input-icon"
                     width="20"
                     height="20"
                     viewBox="0 0 24 24"
@@ -231,6 +295,7 @@
                 >
                 <div class="input-group">
                   <svg
+                    class="input-icon"
                     width="20"
                     height="20"
                     viewBox="0 0 24 24"
@@ -260,7 +325,7 @@
                   {{ form.password1 }}
                   <button type="button" class="password-toggle">
                     <svg
-                      class="eye-open"
+                      class="eye-icon eye-open"
                       width="20"
                       height="20"
                       viewBox="0 0 24 24"
@@ -284,7 +349,7 @@
                       ></circle>
                     </svg>
                     <svg
-                      class="eye-closed"
+                      class="eye-icon eye-closed"
                       width="20"
                       height="20"
                       viewBox="0 0 24 24"
@@ -326,6 +391,7 @@
                 >
                 <div class="input-group">
                   <svg
+                    class="input-icon"
                     width="20"
                     height="20"
                     viewBox="0 0 24 24"
@@ -355,7 +421,7 @@
                   {{ form.password2 }}
                   <button type="button" class="password-toggle">
                     <svg
-                      class="eye-open"
+                      class="eye-icon eye-open"
                       width="20"
                       height="20"
                       viewBox="0 0 24 24"
@@ -379,7 +445,7 @@
                       ></circle>
                     </svg>
                     <svg
-                      class="eye-closed"
+                      class="eye-icon eye-closed"
                       width="20"
                       height="20"
                       viewBox="0 0 24 24"
@@ -412,15 +478,22 @@
                 {% endif %}
               </div>
 
-              <button type="submit" class="btn btn-primary" id="submitBtn">
-                Créer un compte
+              <button
+                type="submit"
+                class="btn btn-primary btn-full"
+                id="submitBtn"
+              >
+                <span class="btn-text">Créer un compte</span>
+                <span class="btn-loader" style="display: none">
+                  <span class="loader"></span>
+                </span>
               </button>
             </form>
 
-            <div class="auth-switch">
+            <div class="auth-switch form-footer">
               <p>
                 Vous avez déjà un compte?
-                <a href="{% url 'account:login' %}" class="forgot-link"
+                <a href="{% url 'account:login' %}" class="switch-form"
                   >Connectez-vous</a
                 >
               </p>
