@@ -77,12 +77,12 @@ WSGI_APPLICATION = "annotation.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "HOST":"pg-annotation-annotation-client.f.aivencloud.com",
-        "USER":"avnadmin",
-        "PASSWORD":"AVNS_3dn_FLyaOoR9sJKXnnF",
-        "NAME":"annotation",
-        "PORT":"25881",
+        "ENGINE": "",
+        "HOST":"",
+        "USER":"",
+        "PASSWORD":"",
+        "NAME":"",
+        "PORT":"",
         "OPTION":{
             "sslmode":"require"
         }
