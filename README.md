@@ -54,6 +54,7 @@ Annotation Vliënt is a web application designed for managing and annotating dat
 
 5. **Access the application:**
    Open your web browser and navigate to `http://127.0.0.1:8000/`.
+   ~Don't forget to set set your database in the settings.py
 
 ## Usage
 
