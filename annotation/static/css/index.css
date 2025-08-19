@@ -1,6 +1,6 @@
 /* Hero Section */
 .hero {
-    background: linear-gradient(135deg, var(--light-blue) 0%, var(--white) 100%);
+    background: linear-gradient(135deg, var(--light-green) 0%, var(--white) 100%);
     padding: 120px 0 80px;
     margin-top: 70px;
 }
@@ -70,14 +70,14 @@
 }
 
 .upload-zone:hover {
-    border-color: var(--primary-blue);
-    background-color: var(--light-blue);
+    border-color: var(--primary-green);
+    background-color: var(--light-green);
     transform: translateY(-2px);
 }
 
 .upload-zone.dragover {
-    border-color: var(--primary-blue);
-    background-color: var(--light-blue);
+    border-color: var(--primary-green);
+    background-color: var(--light-green);
     transform: scale(1.02);
 }
 
@@ -97,7 +97,7 @@
 }
 
 .upload-link {
-    color: var(--primary-blue);
+    color: var(--primary-green);
     font-weight: 600;
     cursor: pointer;
 }
@@ -125,7 +125,7 @@
     padding: 25px;
     box-shadow: var(--shadow);
     transition: var(--transition);
-    border-left: 4px solid var(--primary-blue);
+    border-left: 4px solid var(--primary-green);
 }
 
 .analysis-card:hover {
@@ -169,7 +169,7 @@
 
 .confidence-score {
     font-weight: 700;
-    color: var(--primary-blue);
+    color: var(--primary-green);
     font-size: 1.1rem;
 }
 
@@ -184,7 +184,7 @@
 /* Stats Section */
 .stats {
     padding: 80px 0;
-    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
     color: var(--white);
 }
 
@@ -297,4 +297,3 @@
         grid-template-columns: 1fr;
     }
 }
-

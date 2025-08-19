@@ -35,6 +35,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "annotation",
+    "account"
+
+
 ]
 
 MIDDLEWARE = [
@@ -73,8 +77,19 @@ WSGI_APPLICATION = "annotation.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "HOST":"pg-annotation-annotation-client.f.aivencloud.com",
+        "USER":"avnadmin",
+        "PASSWORD":"AVNS_3dn_FLyaOoR9sJKXnnF",
+        "NAME":"annotation",
+        "PORT":"25881",
+        "OPTION":{
+            "sslmode":"require"
+        }
+    },
+    'sqlite': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',  # Path to your SQLite file
     }
 }
 

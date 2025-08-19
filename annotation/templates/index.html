@@ -8,6 +8,43 @@
     <title>Annotation</title>
     <link rel="stylesheet" href="{% static 'css/index.css' %}" />
     <link rel="stylesheet" href="{% static 'css/common.css' %}" />
+    <style>
+      /* Styles pour le pop-up de connexion */
+      .login-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 10000;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .modal-content {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 10px;
+        width: 90%;
+        max-width: 500px;
+        text-align: center;
+      }
+      
+      .modal-actions {
+        margin-top: 1.5rem;
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+      }
+      
+      .blur-content {
+        filter: blur(5px);
+        pointer-events: none;
+        user-select: none;
+      }
+    </style>
   </head>
   <body>
     <!-- Navigation -->
@@ -26,9 +63,6 @@
           <li class="nav-item">
             <a href="{% url 'historique' %}" class="nav-link">Historique</a>
           </li>
-          <li class="nav-item">
-            <a href="{% url 'login' %}" class="nav-link">Connexion</a>
-          </li>
         </ul>
         <div class="hamburger">
           <span class="bar"></span>
@@ -38,183 +72,215 @@
       </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="hero">
-      <div class="hero-container">
-        <div class="hero-content">
-          <h1 class="hero-title">
-            Annotation Automatique de Données Médicales
-          </h1>
-          <p class="hero-subtitle">
-            Analysez vos images médicales avec l'intelligence artificielle
-          </p>
-          <a href="{% url "upload" %}" class="btn btn-primary hero-btn"
-            >Commencer l'analyse</a
-          >
-        </div>
-        <div class="hero-image">
-          <div class="medical-icon">
-            <svg
-              width="200"
-              height="200"
-              viewBox="0 0 200 200"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <circle
-                cx="100"
-                cy="100"
-                r="80"
-                stroke="#2563eb"
-                stroke-width="4"
-                fill="none"
-              />
-              <path
-                d="M70 100h60M100 70v60"
-                stroke="#2563eb"
-                stroke-width="6"
-                stroke-linecap="round"
-              />
-            </svg>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Quick Upload Section -->
-    <section class="quick-upload">
-      <div class="container">
-        <h2 class="section-title">Téléversement Rapide</h2>
-        <div class="upload-zone" id="quickUploadZone">
-          <div class="upload-content">
-            <svg
-              width="48"
-              height="48"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
-                stroke="#2563eb"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <polyline
-                points="7,10 12,15 17,10"
-                stroke="#2563eb"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <line
-                x1="12"
-                y1="15"
-                x2="12"
-                y2="3"
-                stroke="#2563eb"
-                stroke-width="2"
-                stroke-linecap="round"
-              />
-            </svg>
-            <p>
-              Glissez-déposez votre fichier ici ou
-              <span class="upload-link">cliquez pour sélectionner</span>
+    {% if user.is_authenticated %}
+    <!-- Contenu principal SEULEMENT pour utilisateurs connectés -->
+    <div id="main-content">
+      <!-- Hero Section -->
+      <section class="hero">
+        <div class="hero-container">
+          <div class="hero-content">
+            <h1 class="hero-title">
+              Annotation Automatique de Données Médicales
+            </h1>
+            <p class="hero-subtitle">
+              Analysez et annotez rapidement vos images médicales
             </p>
-            <small>Formats supportés: JPG, PNG, DICOM</small>
+            <a href="{% url "upload" %}" class="btn btn-primary hero-btn"
+            >Commencer l'analyse</a
+            >
           </div>
-          <input
-            type="file"
-            id="quickFileInput"
-            accept=".jpg,.jpeg,.png,.dcm"
-            hidden
-          />
+          <div class="hero-image">
+            <div class="medical-icon">
+              <img src="{% static 'assets/logo1.png' %}" alt="MedAnnote Logo" width="280" height="280">
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <p class="section-title">connecté sous {{ user.username}} <a href= "{% url 'account:logout' %}" class="btn btn-primary" >Se deconnecter </a> </p>
+
+      {% for message in messages %}
+        <div class="alert alert-danger" role="alert">
+          <p class="hero-subtitle">{{ message }}</p>
+        </div>
+      {% endfor %}
+      
+      <!-- Quick Upload Section -->
+      <section class="quick-upload">
+        <div class="container">
+          <h2 class="section-title">Téléversement Rapide</h2>
+          <div class="upload-zone" id="quickUploadZone">
+            <div class="upload-content">
+              <svg
+                width="48"
+                height="48"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+                  stroke="#2563eb"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <polyline
+                  points="7,10 12,15 17,10"
+                  stroke="#2563eb"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <line
+                  x1="12"
+                  y1="15"
+                  x2="12"
+                  y2="3"
+                  stroke="#2563eb"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+              </svg>
+              <p>
+                Glissez-déposez votre fichier ici ou
+                <span class="upload-link">cliquez pour sélectionner</span>
+              </p>
+              <small>Formats supportés: JPG, PNG, DICOM</small>
+            </div>
+            <input
+              type="file"
+              id="quickFileInput"
+              accept=".jpg,.jpeg,.png,.dcm"
+              hidden
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- Recent Analyses Section -->
+      <section class="recent-analyses">
+        <div class="container">
+          <h2 class="section-title">Analyses Récentes</h2>
+          <div class="analyses-grid" id="recentAnalyses">
+            <div class="analysis-card">
+              <div class="analysis-header">
+                <h3>Scanner_thorax_001.jpg</h3>
+                <span class="analysis-date">Il y a 2 heures</span>
+              </div>
+              <div class="analysis-result">
+                <span class="result-label">Poumons normaux</span>
+                <span class="confidence-score">95%</span>
+              </div>
+              <div class="analysis-actions">
+                <button class="btn btn-secondary btn-sm">Voir détails</button>
+              </div>
+            </div>
+
+            <div class="analysis-card">
+              <div class="analysis-header">
+                <h3>IRM_cerebral_002.png</h3>
+                <span class="analysis-date">Hier</span>
+              </div>
+              <div class="analysis-result">
+                <span class="result-label">Anomalie détectée</span>
+                <span class="confidence-score">87%</span>
+              </div>
+              <div class="analysis-actions">
+                <button class="btn btn-secondary btn-sm">Voir détails</button>
+              </div>
+            </div>
+
+            <div class="analysis-card">
+              <div class="analysis-header">
+                <h3>ECG_patient_003.jpg</h3>
+                <span class="analysis-date">Il y a 3 jours</span>
+              </div>
+              <div class="analysis-result">
+                <span class="result-label">Rythme normal</span>
+                <span class="confidence-score">92%</span>
+              </div>
+              <div class="analysis-actions">
+                <button class="btn btn-secondary btn-sm">Voir détails</button>
+              </div>
+            </div>
+          </div>
+          <div class="view-all">
+            <a href="{% url 'historique' %}" class="btn btn-outline"
+              >Voir tout l'historique</a
+            >
+          </div>
+        </div>
+      </section>
+
+      <!-- Stats Section -->
+      <section class="stats">
+        <div class="container">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-number">1,247</div>
+              <div class="stat-label">Analyses effectuées</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number">94.2%</div>
+              <div class="stat-label">Précision moyenne</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number">2.3s</div>
+              <div class="stat-label">Temps moyen d'analyse</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number">24/7</div>
+              <div class="stat-label">Disponibilité</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    {% endif %}
+
+    <!-- Pop-up de connexion -->
+    <div id="loginModal" class="login-modal" style="display: {% if not user.is_authenticated %}block{% else %}none{% endif %};">
+      <div class="modal-content">
+        <h2>Connexion Requise</h2>
+        <p>Vous devez vous connecter pour accéder à cette plateforme.</p>
+        <div class="modal-actions">
+          <a href="{% url 'account:login' %}" class="btn btn-primary">Se connecter</a>
+          <a href="{% url 'account:register' %}" class="btn btn-secondary">Créer un compte</a>
         </div>
       </div>
-    </section>
-
-    <!-- Recent Analyses Section -->
-    <section class="recent-analyses">
-      <div class="container">
-        <h2 class="section-title">Analyses Récentes</h2>
-        <div class="analyses-grid" id="recentAnalyses">
-          <!-- Les analyses récentes seront chargées ici via JavaScript -->
-          <div class="analysis-card">
-            <div class="analysis-header">
-              <h3>Scanner_thorax_001.jpg</h3>
-              <span class="analysis-date">Il y a 2 heures</span>
-            </div>
-            <div class="analysis-result">
-              <span class="result-label">Poumons normaux</span>
-              <span class="confidence-score">95%</span>
-            </div>
-            <div class="analysis-actions">
-              <button class="btn btn-secondary btn-sm">Voir détails</button>
-            </div>
-          </div>
-
-          <div class="analysis-card">
-            <div class="analysis-header">
-              <h3>IRM_cerebral_002.png</h3>
-              <span class="analysis-date">Hier</span>
-            </div>
-            <div class="analysis-result">
-              <span class="result-label">Anomalie détectée</span>
-              <span class="confidence-score">87%</span>
-            </div>
-            <div class="analysis-actions">
-              <button class="btn btn-secondary btn-sm">Voir détails</button>
-            </div>
-          </div>
-
-          <div class="analysis-card">
-            <div class="analysis-header">
-              <h3>ECG_patient_003.jpg</h3>
-              <span class="analysis-date">Il y a 3 jours</span>
-            </div>
-            <div class="analysis-result">
-              <span class="result-label">Rythme normal</span>
-              <span class="confidence-score">92%</span>
-            </div>
-            <div class="analysis-actions">
-              <button class="btn btn-secondary btn-sm">Voir détails</button>
-            </div>
-          </div>
-        </div>
-        <div class="view-all">
-          <a href="history.html" class="btn btn-outline"
-            >Voir tout l'historique</a
-          >
-        </div>
-      </div>
-    </section>
-
-    <!-- Stats Section -->
-    <section class="stats">
-      <div class="container">
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-number">1,247</div>
-            <div class="stat-label">Analyses effectuées</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number">94.2%</div>
-            <div class="stat-label">Précision moyenne</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number">2.3s</div>
-            <div class="stat-label">Temps moyen d'analyse</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number">24/7</div>
-            <div class="stat-label">Disponibilité</div>
-          </div>
-        </div>
-      </div>
-    </section>
+    </div>
 
     <script src="{% static 'js/common.js' %}"></script>
     <script src="{% static 'js/index.js' %}"></script>
+    
+    <script>
+      // Bloquer l'accès si non authentifié
+      document.addEventListener('DOMContentLoaded', function() {
+        const isAuthenticated = {% if user.is_authenticated %}true{% else %}false{% endif %};
+        const loginModal = document.getElementById('loginModal');
+        const mainContent = document.getElementById('main-content');
+        
+        if (!isAuthenticated) {
+          // Afficher le pop-up
+          loginModal.style.display = 'flex';
+          
+          // Bloquer l'interaction avec le contenu
+          if (mainContent) {
+            mainContent.classList.add('blur-content');
+          }
+          
+          // Empêcher la navigation
+          document.querySelectorAll('a').forEach(link => {
+            if (!link.href.includes('/account/')) {
+              link.addEventListener('click', function(e) {
+                e.preventDefault();
+                loginModal.style.display = 'flex';
+              });
+            }
+          });
+        }
+      });
+    </script>
   </body>
 </html>
