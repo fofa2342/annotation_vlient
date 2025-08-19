@@ -1,0 +1,509 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MedAnnote - Inscription</title>
+    <link rel="stylesheet" href="{% static 'css/common.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/login.css' %}" />
+    <link
+      rel="icon"
+      href="{% static 'assets/favicon.ico' %}"
+      type="image/x-icon"
+    />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="nav-logo">
+          <h2>MedAnnote</h2>
+        </div>
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a href="{% url 'account:login' %}" class="nav-link">Connexion</a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'account:register' %}" class="nav-link active"
+              >Inscription</a
+            >
+          </li>
+        </ul>
+        <div class="hamburger">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}" role="alert">
+      <p>{{ message }}</p>
+    </div>
+    {% endfor %}
+
+    <main class="auth-main">
+      <div class="auth-container">
+        <!-- Left Side - Branding -->
+        <div class="auth-branding">
+          <div class="branding-content">
+            <div class="brand-logo">
+              <img
+                src="{% static 'assets/logo.png' %}"
+                alt="MedAnnote Logo"
+                width="280"
+                height="280"
+              />
+            </div>
+            <h1 class="brand-title">MedAnnote</h1>
+            <p class="brand-subtitle">
+              Plateforme d'annotation automatique de données médicales
+            </p>
+            <div class="brand-features">
+              <div class="feature-item">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+                    fill="#2563eb"
+                  />
+                </svg>
+                <span>Annotation rapide et précise</span>
+              </div>
+              <div class="feature-item">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+                    fill="#2563eb"
+                  />
+                </svg>
+                <span>Collaboration en temps réel</span>
+              </div>
+              <div class="feature-item">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+                    fill="#2563eb"
+                  />
+                </svg>
+                <span>Exportation facile des données</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side - Registration Form -->
+        <div class="auth-forms form-header active">
+          <div class="auth-form active">
+            <h2>Créer un compte</h2>
+            <p>
+              Rejoignez notre plateforme pour commencer à annoter vos données
+              médicales.
+            </p>
+
+            <form
+              class="form"
+              action="{% url 'account:register' %}"
+              method="post"
+              id="registerForm"
+            >
+              {% csrf_token %} {% if form.non_field_errors %}
+              <div class="alert alert-danger">
+                {% for error in form.non_field_errors %}
+                <p>{{ error }}</p>
+                {% endfor %}
+              </div>
+              {% endif %}
+
+              <!-- First Name -->
+              <div class="form-group">
+                <label
+                  for="{{ form.first_name.id_for_label }}"
+                  class="form-label"
+                  >Prénom</label
+                >
+                <div class="input-group">
+                  <svg
+                    class="input-icon"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
+                      stroke="#64748b"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <circle
+                      cx="12"
+                      cy="7"
+                      r="4"
+                      stroke="#64748b"
+                      stroke-width="2"
+                      fill="none"
+                    />
+                  </svg>
+                  {{ form.first_name }}
+                </div>
+                {% if form.first_name.errors %}
+                <div class="error-message">{{ form.first_name.errors.0 }}</div>
+                {% endif %}
+              </div>
+
+              <!-- Last Name -->
+              <div class="form-group">
+                <label
+                  for="{{ form.last_name.id_for_label }}"
+                  class="form-label"
+                  >Nom</label
+                >
+                <div class="input-group">
+                  <svg
+                    class="input-icon"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
+                      stroke="#64748b"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <circle
+                      cx="12"
+                      cy="7"
+                      r="4"
+                      stroke="#64748b"
+                      stroke-width="2"
+                      fill="none"
+                    />
+                  </svg>
+                  {{ form.last_name }}
+                </div>
+                {% if form.last_name.errors %}
+                <div class="error-message">{{ form.last_name.errors.0 }}</div>
+                {% endif %}
+              </div>
+
+              <!-- Username -->
+              <div class="form-group">
+                <label for="{{ form.username.id_for_label }}" class="form-label"
+                  >Nom d'utilisateur</label
+                >
+                <div class="input-group">
+                  <svg
+                    class="input-icon"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
+                      stroke="#64748b"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <circle
+                      cx="12"
+                      cy="7"
+                      r="4"
+                      stroke="#64748b"
+                      stroke-width="2"
+                      fill="none"
+                    />
+                  </svg>
+                  {{ form.username }}
+                </div>
+                {% if form.username.errors %}
+                <div class="error-message">{{ form.username.errors.0 }}</div>
+                {% endif %}
+              </div>
+
+              <!-- Email -->
+              <div class="form-group">
+                <label for="{{ form.email.id_for_label }}" class="form-label"
+                  >Email</label
+                >
+                <div class="input-group">
+                  <svg
+                    class="input-icon"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                      stroke="#64748b"
+                      stroke-width="2"
+                      fill="none"
+                    />
+                    <polyline
+                      points="22,6 12,13 2,6"
+                      stroke="#64748b"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  {{ form.email }}
+                </div>
+                {% if form.email.errors %}
+                <div class="error-message">{{ form.email.errors.0 }}</div>
+                {% endif %}
+              </div>
+
+              <!-- Password 1 -->
+              <div class="form-group">
+                <label
+                  for="{{ form.password1.id_for_label }}"
+                  class="form-label"
+                  >Créez un mot de passe</label
+                >
+                <div class="input-group">
+                  <svg
+                    class="input-icon"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <rect
+                      x="3"
+                      y="11"
+                      width="18"
+                      height="11"
+                      rx="2"
+                      ry="2"
+                      stroke="#64748b"
+                      stroke-width="2"
+                      fill="none"
+                    />
+                    <circle cx="12" cy="16" r="1" fill="#64748b" />
+                    <path
+                      d="M7 11V7a5 5 0 0 1 10 0v4"
+                      stroke="#64748b"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  {{ form.password1 }}
+                  <button type="button" class="password-toggle">
+                    <svg
+                      class="eye-icon eye-open"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
+                        stroke="#64748b"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></path>
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="3"
+                        stroke="#64748b"
+                        stroke-width="2"
+                        fill="none"
+                      ></circle>
+                    </svg>
+                    <svg
+                      class="eye-icon eye-closed"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      style="display: none"
+                    >
+                      <path
+                        d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"
+                        stroke="#64748b"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></path>
+                      <line
+                        x1="1"
+                        y1="1"
+                        x2="23"
+                        y2="23"
+                        stroke="#64748b"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></line>
+                    </svg>
+                  </button>
+                </div>
+                {% if form.password1.errors %}
+                <div class="error-message">{{ form.password1.errors.0 }}</div>
+                {% endif %}
+              </div>
+
+              <!-- Password 2 -->
+              <div class="form-group">
+                <label
+                  for="{{ form.password2.id_for_label }}"
+                  class="form-label"
+                  >Confirmer le mot de passe</label
+                >
+                <div class="input-group">
+                  <svg
+                    class="input-icon"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <rect
+                      x="3"
+                      y="11"
+                      width="18"
+                      height="11"
+                      rx="2"
+                      ry="2"
+                      stroke="#64748b"
+                      stroke-width="2"
+                      fill="none"
+                    />
+                    <circle cx="12" cy="16" r="1" fill="#64748b" />
+                    <path
+                      d="M7 11V7a5 5 0 0 1 10 0v4"
+                      stroke="#64748b"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  {{ form.password2 }}
+                  <button type="button" class="password-toggle">
+                    <svg
+                      class="eye-icon eye-open"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
+                        stroke="#64748b"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></path>
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="3"
+                        stroke="#64748b"
+                        stroke-width="2"
+                        fill="none"
+                      ></circle>
+                    </svg>
+                    <svg
+                      class="eye-icon eye-closed"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      style="display: none"
+                    >
+                      <path
+                        d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"
+                        stroke="#64748b"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></path>
+                      <line
+                        x1="1"
+                        y1="1"
+                        x2="23"
+                        y2="23"
+                        stroke="#64748b"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></line>
+                    </svg>
+                  </button>
+                </div>
+                {% if form.password2.errors %}
+                <div class="error-message">{{ form.password2.errors.0 }}</div>
+                {% endif %}
+              </div>
+
+              <button
+                type="submit"
+                class="btn btn-primary btn-full"
+                id="submitBtn"
+              >
+                <span class="btn-text">Créer un compte</span>
+                <span class="btn-loader" style="display: none">
+                  <span class="loader"></span>
+                </span>
+              </button>
+            </form>
+
+            <div class="auth-switch form-footer">
+              <p>
+                Vous avez déjà un compte?
+                <a href="{% url 'account:login' %}" class="switch-form"
+                  >Connectez-vous</a
+                >
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="{% static 'js/common.js' %}"></script>
+    <script src="{% static 'js/register.js' %}"></script>
+  </body>
+</html>

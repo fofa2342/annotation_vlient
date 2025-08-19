@@ -1,0 +1,433 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MedAnnote - Historique des Analyses</title>
+    <link rel="stylesheet" href="{% static 'css/common.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/history.css' %}" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="nav-logo">
+          <h2>MedAnnote</h2>
+        </div>
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a href="{% url 'index' %}" class="nav-link">Accueil</a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'upload' %}" class="nav-link">Téléversement</a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'historique' %}" class="nav-link active">Historique</a>
+          </li>
+        </ul>
+        <div class="hamburger">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Header -->
+    <section class="history-header">
+      <div class="container">
+        <div class="header-content">
+          <h1 class="page-title">Historique des Analyses</h1>
+          <p class="page-subtitle">
+            Consultez et gérez vos analyses précédentes
+          </p>
+        </div>
+        <div class="header-stats">
+          <div class="stat-item">
+            <span class="stat-number" id="totalAnalyses">0</span>
+            <span class="stat-label">Analyses totales</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" id="thisMonth">0</span>
+            <span class="stat-label">Ce mois-ci</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" id="avgConfidence">0%</span>
+            <span class="stat-label">Confiance moyenne</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Filters and Search -->
+    <section class="filters-section">
+      <div class="container">
+        <div class="filters-container">
+          <div class="search-box">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle
+                cx="11"
+                cy="11"
+                r="8"
+                stroke="#64748b"
+                stroke-width="2"
+                fill="none"
+              />
+              <path
+                d="M21 21l-4.35-4.35"
+                stroke="#64748b"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Rechercher par nom de fichier..."
+            />
+          </div>
+          <div class="filter-group">
+            <select id="dateFilter" class="filter-select">
+              <option value="">Toutes les dates</option>
+              <option value="today">Aujourd'hui</option>
+              <option value="week">Cette semaine</option>
+              <option value="month">Ce mois-ci</option>
+              <option value="year">Cette année</option>
+            </select>
+            <select id="resultFilter" class="filter-select">
+              <option value="">Tous les résultats</option>
+              <option value="normal">Normal</option>
+              <option value="anomaly">Anomalie détectée</option>
+              <option value="uncertain">Incertain</option>
+            </select>
+            <select id="confidenceFilter" class="filter-select">
+              <option value="">Toute confiance</option>
+              <option value="high">Élevée (>90%)</option>
+              <option value="medium">Moyenne (70-90%)</option>
+              <option value="low">Faible (<70%)</option>
+            </select>
+          </div>
+          <div class="view-controls">
+            <button class="view-btn active" data-view="grid" title="Vue grille">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect
+                  x="3"
+                  y="3"
+                  width="7"
+                  height="7"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  fill="none"
+                />
+                <rect
+                  x="14"
+                  y="3"
+                  width="7"
+                  height="7"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  fill="none"
+                />
+                <rect
+                  x="14"
+                  y="14"
+                  width="7"
+                  height="7"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  fill="none"
+                />
+                <rect
+                  x="3"
+                  y="14"
+                  width="7"
+                  height="7"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  fill="none"
+                />
+              </svg>
+            </button>
+            <button class="view-btn" data-view="list" title="Vue liste">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <line
+                  x1="8"
+                  y1="6"
+                  x2="21"
+                  y2="6"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+                <line
+                  x1="8"
+                  y1="12"
+                  x2="21"
+                  y2="12"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+                <line
+                  x1="8"
+                  y1="18"
+                  x2="21"
+                  y2="18"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+                <line
+                  x1="3"
+                  y1="6"
+                  x2="3.01"
+                  y2="6"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+                <line
+                  x1="3"
+                  y1="12"
+                  x2="3.01"
+                  y2="12"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+                <line
+                  x1="3"
+                  y1="18"
+                  x2="3.01"
+                  y2="18"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results Section -->
+    <section class="results-section">
+      <div class="container">
+        <div class="results-header">
+          <div class="results-count">
+            <span id="resultsCount">0</span> résultat(s) trouvé(s)
+          </div>
+          <div class="sort-controls">
+            <label for="sortBy">Trier par:</label>
+            <select id="sortBy" class="sort-select">
+              <option value="date-desc">Date (récent)</option>
+              <option value="date-asc">Date (ancien)</option>
+              <option value="name-asc">Nom (A-Z)</option>
+              <option value="name-desc">Nom (Z-A)</option>
+              <option value="confidence-desc">Confiance (élevée)</option>
+              <option value="confidence-asc">Confiance (faible)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Grid View -->
+        <div class="analyses-grid active" id="gridView">
+          <!-- Les analyses seront chargées ici via JavaScript -->
+        </div>
+
+        <!-- List View -->
+        <div class="analyses-list" id="listView">
+          <div class="list-header">
+            <div class="col-file">Fichier</div>
+            <div class="col-date">Date</div>
+            <div class="col-result">Résultat</div>
+            <div class="col-confidence">Confiance</div>
+            <div class="col-actions">Actions</div>
+          </div>
+          <div class="list-content">
+            <!-- Les analyses seront chargées ici via JavaScript -->
+          </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination" id="pagination">
+          <button class="pagination-btn" id="prevPage" disabled>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <polyline
+                points="15,18 9,12 15,6"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            Précédent
+          </button>
+          <div class="pagination-info">
+            <span id="pageInfo">Page 1 sur 1</span>
+          </div>
+          <button class="pagination-btn" id="nextPage" disabled>
+            Suivant
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <polyline
+                points="9,18 15,12 9,6"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" style="display: none">
+          <div class="empty-icon">
+            <svg
+              width="64"
+              height="64"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle
+                cx="11"
+                cy="11"
+                r="8"
+                stroke="#94a3b8"
+                stroke-width="2"
+                fill="none"
+              />
+              <path
+                d="M21 21l-4.35-4.35"
+                stroke="#94a3b8"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+          <h3>Aucune analyse trouvée</h3>
+          <p>
+            Essayez de modifier vos critères de recherche ou
+            <a href="upload.html">commencez une nouvelle analyse</a>.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bulk Actions Modal -->
+    <div class="modal" id="bulkModal" style="display: none">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Actions groupées</h3>
+          <button class="modal-close" id="closeBulkModal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p>
+            Que souhaitez-vous faire avec les
+            <span id="selectedCount">0</span> analyse(s) sélectionnée(s) ?
+          </p>
+          <div class="bulk-actions">
+            <button class="btn btn-secondary" id="bulkDownload">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <polyline
+                  points="7,10 12,15 17,10"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <line
+                  x1="12"
+                  y1="15"
+                  x2="12"
+                  y2="3"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+              </svg>
+              Télécharger tout
+            </button>
+            <button class="btn btn-outline" id="bulkDelete">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <polyline
+                  points="3,6 5,6 21,6"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              Supprimer
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="{% static "js/common.js" %}"></script>
+    <script src="{% static "js/history.js" %}"></script>
+  </body>
+</html>

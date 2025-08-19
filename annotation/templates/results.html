@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MedAnnote - Résultats de l'Analyse</title>
+    <link rel="stylesheet" href="{% static 'css/common.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/results.css' %}" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="nav-logo">
+          <h2>MedAnnote</h2>
+        </div>
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a href="{% url 'index' %}" class="nav-link">Accueil</a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'upload' %}" class="nav-link">Téléversement</a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'historique' %}" class="nav-link">Historique</a>
+          </li>
+        </ul>
+        <div class="hamburger">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Header -->
+    <section class="results-header">
+      <div class="container">
+        <div class="header-content">
+          <h1 class="page-title">Résultats de l'Analyse</h1>
+          <div class="file-info">
+            <span class="file-name" id="fileName">Scanner_thorax_001.jpg</span>
+            <span class="analysis-date" id="analysisDate"
+              >Analysé le 15 janvier 2024 à 14:30</span
+            >
+          </div>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-primary" id="downloadBtn">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <polyline
+                points="7,10 12,15 17,10"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <line
+                x1="12"
+                y1="15"
+                x2="12"
+                y2="3"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+            Télécharger le rapport
+          </button>
+          <button class="btn btn-secondary" id="retestBtn">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <polyline
+                points="23,4 23,10 17,10"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            Re-tester
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results Content -->
+    <section class="results-content">
+      <div class="container">
+        <div class="results-grid">
+          <!-- Main Result -->
+          <div class="result-card main-result">
+            <div class="result-header">
+              <h2>Diagnostic Principal</h2>
+              <div class="confidence-badge" id="confidenceBadge">
+                <span class="confidence-value">94%</span>
+                <span class="confidence-label">Confiance</span>
+              </div>
+            </div>
+            <div class="result-content">
+              <div class="diagnosis" id="diagnosis">
+                <div class="diagnosis-icon">
+                  <svg
+                    width="48"
+                    height="48"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M22 12h-4l-3 9L9 3l-3 9H2"
+                      stroke="#10b981"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </div>
+                <div class="diagnosis-text">
+                  <h3>Poumons normaux</h3>
+                  <p>
+                    Aucune anomalie détectée dans les structures pulmonaires
+                  </p>
+                </div>
+              </div>
+              <div class="result-details">
+                <div class="detail-item">
+                  <span class="detail-label">Temps d'analyse:</span>
+                  <span class="detail-value">2.3 secondes</span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">Modèle utilisé:</span>
+                  <span class="detail-value">MedNet v2.1</span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">Résolution:</span>
+                  <span class="detail-value">512x512 pixels</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Image Comparison -->
+          <div class="result-card image-comparison">
+            <div class="result-header">
+              <h2>Comparaison d'Images</h2>
+              <div class="image-toggle">
+                <button class="toggle-btn active" data-view="original">
+                  Original
+                </button>
+                <button class="toggle-btn" data-view="annotated">
+                  Annotée
+                </button>
+                <button class="toggle-btn" data-view="overlay">
+                  Superposition
+                </button>
+              </div>
+            </div>
+            <div class="image-container">
+              <div class="image-view active" id="originalView">
+                <img
+                  src="https://via.placeholder.com/400x400/e2e8f0/64748b?text=Image+Originale"
+                  alt="Image originale"
+                  class="medical-image"
+                />
+                <div class="image-label">Image Originale</div>
+              </div>
+              <div class="image-view" id="annotatedView">
+                <img
+                  src="https://via.placeholder.com/400x400/dbeafe/2563eb?text=Image+Annotée"
+                  alt="Image annotée"
+                  class="medical-image"
+                />
+                <div class="image-label">Image Annotée par IA</div>
+              </div>
+              <div class="image-view" id="overlayView">
+                <div class="overlay-container">
+                  <img
+                    src="https://via.placeholder.com/400x400/e2e8f0/64748b?text=Superposition"
+                    alt="Superposition"
+                    class="medical-image"
+                  />
+                  <div class="overlay-annotations">
+                    <!-- Annotations dynamiques -->
+                  </div>
+                </div>
+                <div class="image-label">Superposition</div>
+              </div>
+            </div>
+            <div class="image-controls">
+              <button class="control-btn" id="zoomIn">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle
+                    cx="11"
+                    cy="11"
+                    r="8"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    fill="none"
+                  />
+                  <path
+                    d="M21 21l-4.35-4.35"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <line
+                    x1="11"
+                    y1="8"
+                    x2="11"
+                    y2="14"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                  <line
+                    x1="8"
+                    y1="11"
+                    x2="14"
+                    y2="11"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                </svg>
+                Zoom +
+              </button>
+              <button class="control-btn" id="zoomOut">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle
+                    cx="11"
+                    cy="11"
+                    r="8"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    fill="none"
+                  />
+                  <path
+                    d="M21 21l-4.35-4.35"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <line
+                    x1="8"
+                    y1="11"
+                    x2="14"
+                    y2="11"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                </svg>
+                Zoom -
+              </button>
+              <button class="control-btn" id="resetView">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <polyline
+                    points="23,4 23,10 17,10"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                Reset
+              </button>
+            </div>
+          </div>
+
+          <!-- Analysis Details -->
+          <div class="result-card analysis-details">
+            <div class="result-header">
+              <h2>Détails de l'Analyse</h2>
+            </div>
+            <div class="details-content">
+              <div class="detail-section">
+                <h3>Régions analysées</h3>
+                <div class="region-list">
+                  <div class="region-item">
+                    <div
+                      class="region-color"
+                      style="background-color: #10b981"
+                    ></div>
+                    <span class="region-name">Poumon droit</span>
+                    <span class="region-confidence">96%</span>
+                  </div>
+                  <div class="region-item">
+                    <div
+                      class="region-color"
+                      style="background-color: #3b82f6"
+                    ></div>
+                    <span class="region-name">Poumon gauche</span>
+                    <span class="region-confidence">92%</span>
+                  </div>
+                  <div class="region-item">
+                    <div
+                      class="region-color"
+                      style="background-color: #f59e0b"
+                    ></div>
+                    <span class="region-name">Médiastin</span>
+                    <span class="region-confidence">89%</span>
+                  </div>
+                </div>
+              </div>
+              <div class="detail-section">
+                <h3>Observations</h3>
+                <ul class="observation-list">
+                  <li>Structure pulmonaire normale</li>
+                  <li>Absence de nodules ou masses</li>
+                  <li>Vascularisation normale</li>
+                  <li>Diaphragme bien délimité</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Statistics Chart -->
+          <div class="result-card statistics-chart">
+            <div class="result-header">
+              <h2>Statistiques de Confiance</h2>
+            </div>
+            <div class="chart-container">
+              <canvas id="confidenceChart" width="400" height="300"></canvas>
+            </div>
+            <div class="chart-legend">
+              <div class="legend-item">
+                <div
+                  class="legend-color"
+                  style="background-color: #10b981"
+                ></div>
+                <span>Normal (94%)</span>
+              </div>
+              <div class="legend-item">
+                <div
+                  class="legend-color"
+                  style="background-color: #f59e0b"
+                ></div>
+                <span>Incertain (4%)</span>
+              </div>
+              <div class="legend-item">
+                <div
+                  class="legend-color"
+                  style="background-color: #ef4444"
+                ></div>
+                <span>Anormal (2%)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Action Bar -->
+    <div class="action-bar">
+      <div class="container">
+        <div class="action-content">
+          <div class="action-info">
+            <span>Analyse terminée avec succès</span>
+          </div>
+          <div class="action-buttons">
+            <button class="btn btn-outline" id="saveToHistory">
+              Sauvegarder dans l'historique
+            </button>
+            <button class="btn btn-primary" id="newAnalysis">
+              Nouvelle analyse
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="{% static 'js/common.js' %}"></script>
+    <script src="{% static 'js/results.js' %}"></script>
+  </body>
+</html>
